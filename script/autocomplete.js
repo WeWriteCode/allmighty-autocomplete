@@ -11,7 +11,9 @@ app.directive('autocomplete', function() {
       searchParam: '=ngModel',
       suggestions: '=data',
       onType: '=onType',
-      onSelect: '=onSelect'
+      onSelect: '=onSelect',
+      outputParam: '=outputParam',
+      minlength: '=minlength'
     },
     controller: ['$scope', function($scope){
       // the index of the suggestions that's currently selected
@@ -37,10 +39,13 @@ app.directive('autocomplete', function() {
       // autocompleting drop down on/off
       $scope.completing = false;
 
+      // min length of search string
+      var minlength = $scope.minlength || 1;
+
       // starts autocompleting on typing in something
       $scope.$watch('searchParam', function(newValue, oldValue){
 
-        if (oldValue === newValue || !oldValue) {
+        if (oldValue === newValue || (newValue && newValue.length < minlength) ) {
           return;
         }
 
@@ -53,6 +58,8 @@ app.directive('autocomplete', function() {
         // function thats passed to on-type attribute gets executed
         if($scope.onType)
           $scope.onType($scope.searchParam);
+
+        console.log("hhhhhhl----");
       });
 
       // for hovering over suggestions
@@ -80,8 +87,9 @@ app.directive('autocomplete', function() {
       // selecting a suggestion with RIGHT ARROW or ENTER
       $scope.select = function(suggestion){
         if(suggestion){
-          $scope.searchParam = suggestion;
-          $scope.searchFilter = suggestion;
+          console.log("SS: ", suggestion);
+          $scope.searchParam = suggestion[$scope.outputParam] || suggestion;
+          $scope.searchFilter = suggestion[$scope.outputParam] || suggestion;
           if($scope.onSelect)
             $scope.onSelect(suggestion);
         }
@@ -95,9 +103,11 @@ app.directive('autocomplete', function() {
     }],
     link: function(scope, element, attrs){
 
+      scope.outputParam = attrs.outputParam;
+
       var attr = '';
 
-      // Default atts
+      // Default attrs
       scope.attrs = {
         "placeholder": "start typing...",
         "class": "",
@@ -127,6 +137,7 @@ app.directive('autocomplete', function() {
       var key = {left: 37, up: 38, right: 39, down: 40 , enter: 13, esc: 27, tab: 9};
 
       document.addEventListener("keydown", function(e){
+
         var keycode = e.keyCode || e.which;
 
         switch (keycode){
@@ -150,6 +161,7 @@ app.directive('autocomplete', function() {
       }, true);
 
       element[0].addEventListener("keydown",function (e){
+
         var keycode = e.keyCode || e.which;
 
         var l = angular.element(this).find('li').length;
@@ -170,7 +182,7 @@ app.directive('autocomplete', function() {
             scope.setIndex(index);
 
             if(index!==-1)
-              scope.preSelect(angular.element(angular.element(this).find('li')[index]).text());
+              scope.preSelect(scope.suggestions[index]);
 
             scope.$apply();
 
@@ -189,7 +201,7 @@ app.directive('autocomplete', function() {
             scope.setIndex(index);
 
             if(index!==-1)
-              scope.preSelect(angular.element(angular.element(this).find('li')[index]).text());
+              scope.preSelect(scope.suggestions[index]);
 
             break;
           case key.left:
@@ -201,13 +213,14 @@ app.directive('autocomplete', function() {
             index = scope.getIndex();
             // scope.preSelectOff();
             if(index !== -1) {
-              scope.select(angular.element(angular.element(this).find('li')[index]).text());
+              scope.select(scope.suggestions[index]);
               if(keycode == key.enter) {
                 e.preventDefault();
               }
             } else {
               if(keycode == key.enter) {
                 scope.select();
+                e.preventDefault();
               }
             }
             scope.setIndex(-1);
@@ -228,7 +241,7 @@ app.directive('autocomplete', function() {
       });
     },
     template: '\
-        <div class="autocomplete {{ attrs.class }}" id="{{ attrs.id }}">\
+        <div class="autocomplete {{ attrs.class }}"" id="{{ attrs.id }}">\
           <input\
             type="text"\
             ng-model="searchParam"\
@@ -240,10 +253,10 @@ app.directive('autocomplete', function() {
               suggestion\
               ng-repeat="suggestion in suggestions | filter:searchFilter | orderBy:\'toString()\' track by $index"\
               index="{{ $index }}"\
-              val="{{ suggestion }}"\
+              val="{{ suggestion[outputParam] || suggestion }}"\
               ng-class="{ active: ($index === selectedIndex) }"\
               ng-click="select(suggestion)"\
-              ng-bind-html="suggestion | highlight:searchParam"></li>\
+              ng-bind-html="suggestion[outputParam] || suggestion | highlight:searchParam"></li>\
           </ul>\
         </div>'
   };

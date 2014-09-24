@@ -44,6 +44,8 @@ You can also pass a function that receives changes with the `on-type` attribute.
 
 `data` : Pass an array to the autocomplete directive. Should be accessible in the $scope of your controller.
 
+`output-param` : Parameter name for output string when data is set of objects or arrays.
+
 `on-type` : *(optional)* Pass a function that will receive changes, when somebody types something. It passes the full string for any character typed or deleted. You can use that for example to update the array that you passed in data.
 
 `on-select` : *(optional)* Pass a function that will receive changes, when a suggestion is selected. It passes the full string of the suggestion.
@@ -51,6 +53,8 @@ You can also pass a function that receives changes with the `on-type` attribute.
 `click-activation` : *(optional)* When `true`, the suggestion box opens on click (unfortunately onfoucs is not implemented properly in most browsers right now). By default it is only activated, when you start typing something.
 
 `ng-model`: What you typed in will be in this variable and accessible in the $scope of the controller.
+
+`minlength`: The minimum length of string required before searching.
 
 `attr-placeholder`: *(optional)* Sets desired text as placeholder into the input element of autocomplete directive. By default it's "start typing..."
 
