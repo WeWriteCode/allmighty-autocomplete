@@ -58,8 +58,6 @@ app.directive('autocomplete', function() {
         // function thats passed to on-type attribute gets executed
         if($scope.onType)
           $scope.onType($scope.searchParam);
-
-        console.log("hhhhhhl----");
       });
 
       // for hovering over suggestions
@@ -87,7 +85,6 @@ app.directive('autocomplete', function() {
       // selecting a suggestion with RIGHT ARROW or ENTER
       $scope.select = function(suggestion){
         if(suggestion){
-          console.log("SS: ", suggestion);
           $scope.searchParam = suggestion[$scope.outputParam] || suggestion;
           $scope.searchFilter = suggestion[$scope.outputParam] || suggestion;
           if($scope.onSelect)
