@@ -12,6 +12,7 @@ app.directive('autocomplete', function() {
       suggestions: '=data',
       onType: '=onType',
       onSelect: '=onSelect',
+      onNew: '=onNew',
       outputParam: '=outputParam',
       minlength: '=minlength'
     },
@@ -89,6 +90,9 @@ app.directive('autocomplete', function() {
           $scope.searchFilter = suggestion[$scope.outputParam] || suggestion;
           if($scope.onSelect)
             $scope.onSelect(suggestion);
+        } else {
+          if($scope.onNew && $scope.searchParam.length > 0)
+            $scope.onNew($scope.searchParam);
         }
         watching = false;
         $scope.completing = false;
@@ -209,12 +213,10 @@ app.directive('autocomplete', function() {
 
             index = scope.getIndex();
 
-            
             // scope.preSelectOff();
-            if(index !== -1) {
-              
-              
+            if(index !== -1) {  
               scope.select(scope.suggestions[angular.element(angular.element(this).find('li')[index]).attr('rel')]);
+              
               if(keycode == key.enter) {
                 e.preventDefault();
               }
@@ -243,7 +245,7 @@ app.directive('autocomplete', function() {
 
     },
     template: '\
-        <div class="autocomplete {{ attrs.class }}"" id="{{ attrs.id }}">\
+        <div class="autocomplete {{ attrs.class }}" id="{{ attrs.id }}">\
           <input\
             type="text"\
             ng-model="searchParam"\
