@@ -179,7 +179,7 @@ app.directive('autocomplete', function() {
             scope.setIndex(index);
 
             if(index!==-1)
-              scope.preSelect(scope.suggestions[index]);
+              scope.preSelect(scope.suggestions[angular.element(angular.element(this).find('li')[index]).attr('rel')]);
 
             scope.$apply();
 
@@ -198,7 +198,7 @@ app.directive('autocomplete', function() {
             scope.setIndex(index);
 
             if(index!==-1)
-              scope.preSelect(scope.suggestions[index]);
+              scope.preSelect(scope.suggestions[angular.element(angular.element(this).find('li')[index]).attr('rel')]);
 
             break;
           case key.left:
@@ -208,9 +208,13 @@ app.directive('autocomplete', function() {
           case key.tab:
 
             index = scope.getIndex();
+
+            
             // scope.preSelectOff();
             if(index !== -1) {
-              scope.select(scope.suggestions[index]);
+              
+              
+              scope.select(scope.suggestions[angular.element(angular.element(this).find('li')[index]).attr('rel')]);
               if(keycode == key.enter) {
                 e.preventDefault();
               }
@@ -236,6 +240,7 @@ app.directive('autocomplete', function() {
         }
 
       });
+
     },
     template: '\
         <div class="autocomplete {{ attrs.class }}"" id="{{ attrs.id }}">\
@@ -253,7 +258,9 @@ app.directive('autocomplete', function() {
               val="{{ suggestion[outputParam] || suggestion }}"\
               ng-class="{ active: ($index === selectedIndex) }"\
               ng-click="select(suggestion)"\
-              ng-bind-html="suggestion[outputParam] || suggestion | highlight:searchParam"></li>\
+              ng-bind-html="suggestion[outputParam] || suggestion | highlight:searchParam"\
+              rel="{{ suggestions.indexOf(suggestion) }}"\
+              ></li>\
           </ul>\
         </div>'
   };
