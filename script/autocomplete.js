@@ -2,7 +2,7 @@
 
 var app = angular.module('autocomplete', []);
 
-app.directive('autocomplete', function() {
+app.directive('autocomplete', ['$timeout', function($timeout) {
   var index = -1;
 
   return {
@@ -13,7 +13,7 @@ app.directive('autocomplete', function() {
       onType: '=onType',
       onSelect: '=onSelect',
       onNew: '=onNew',
-      outputParam: '=outputParam',
+      titleField: '=titlefield',
       minlength: '=minlength'
     },
     controller: ['$scope', function($scope){
@@ -86,8 +86,8 @@ app.directive('autocomplete', function() {
       // selecting a suggestion with RIGHT ARROW or ENTER
       $scope.select = function(suggestion){
         if(suggestion){
-          $scope.searchParam = suggestion[$scope.outputParam] || suggestion;
-          $scope.searchFilter = suggestion[$scope.outputParam] || suggestion;
+          $scope.searchParam = suggestion[$scope.titlefield] || suggestion;
+          $scope.searchFilter = suggestion[$scope.titlefield] || suggestion;
           if($scope.onSelect)
             $scope.onSelect(suggestion);
         } else {
@@ -104,7 +104,7 @@ app.directive('autocomplete', function() {
     }],
     link: function(scope, element, attrs){
 
-      scope.outputParam = attrs.outputParam;
+      scope.titlefield = attrs.titlefield;
 
       var attr = '';
 
@@ -257,16 +257,16 @@ app.directive('autocomplete', function() {
               suggestion\
               ng-repeat="suggestion in suggestions | filter:searchFilter | orderBy:\'toString()\' track by $index"\
               index="{{ $index }}"\
-              val="{{ suggestion[outputParam] || suggestion }}"\
+              val="{{ suggestion[titlefield] || suggestion }}"\
               ng-class="{ active: ($index === selectedIndex) }"\
               ng-click="select(suggestion)"\
-              ng-bind-html="suggestion[outputParam] || suggestion | highlight:searchParam"\
+              ng-bind-html="suggestion[titlefield] || suggestion | highlight:searchParam"\
               rel="{{ suggestions.indexOf(suggestion) }}"\
               ></li>\
           </ul>\
         </div>'
   };
-});
+}]);
 
 app.filter('highlight', ['$sce', function ($sce) {
   return function (input, searchParam) {
