@@ -13,7 +13,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
       onType: '=onType',
       onSelect: '=onSelect',
       onNew: '=onNew',
-      titleField: '=titlefield',
+      titleField: '=titleField',
       minlength: '=minlength'
     },
     controller: ['$scope', function($scope){
@@ -86,8 +86,8 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
       // selecting a suggestion with RIGHT ARROW or ENTER
       $scope.select = function(suggestion){
         if(suggestion){
-          $scope.searchParam = suggestion[$scope.titlefield] || suggestion;
-          $scope.searchFilter = suggestion[$scope.titlefield] || suggestion;
+          $scope.searchParam = suggestion[$scope.titleField] || suggestion;
+          $scope.searchFilter = suggestion[$scope.titleField] || suggestion;
           if($scope.onSelect)
             $scope.onSelect(suggestion);
         } else {
@@ -104,7 +104,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
     }],
     link: function(scope, element, attrs){
 
-      scope.titlefield = attrs.titlefield;
+      scope.titleField = attrs.titleField;
 
       var attr = '';
 
@@ -257,10 +257,10 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
               suggestion\
               ng-repeat="suggestion in suggestions | filter:searchFilter | orderBy:\'toString()\' track by $index"\
               index="{{ $index }}"\
-              val="{{ suggestion[titlefield] || suggestion }}"\
+              val="{{ suggestion[titleField] || suggestion }}"\
               ng-class="{ active: ($index === selectedIndex) }"\
               ng-click="select(suggestion)"\
-              ng-bind-html="suggestion[titlefield] || suggestion | highlight:searchParam"\
+              ng-bind-html="suggestion[titleField] || suggestion | highlight:searchParam"\
               rel="{{ suggestions.indexOf(suggestion) }}"\
               ></li>\
           </ul>\
