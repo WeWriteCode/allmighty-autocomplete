@@ -157,7 +157,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
           scope.setIndex(-1);
           scope.$apply();
         }, 200);
-      }, true);
+      });
 
       element[0].addEventListener("keydown",function (e){
 
