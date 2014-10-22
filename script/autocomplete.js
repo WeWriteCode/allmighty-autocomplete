@@ -128,10 +128,8 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
 
       if (attrs.clickActivation) {
         element[0].onclick = function(e){
-          if(!scope.searchParam){
-            scope.completing = true;
-            scope.$apply();
-          }
+          scope.completing = true;
+          scope.$apply();
         };
       }
 
