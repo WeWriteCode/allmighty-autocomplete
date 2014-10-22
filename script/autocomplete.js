@@ -149,7 +149,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
         }
       }, true);
 
-      document.addEventListener("blur", function(e){
+      element.find('input').blur(function(e){
         // disable suggestions on blur
         // we do a timeout to prevent hiding it before a click event is registered
         setTimeout(function() {
