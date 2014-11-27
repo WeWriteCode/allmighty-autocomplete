@@ -44,7 +44,7 @@ You can also pass a function that receives changes with the `on-type` attribute.
 
 `data` : Pass an array to the autocomplete directive. Should be accessible in the $scope of your controller.
 
-`output-param` : Parameter name for output string when data is set of objects or arrays.
+`title-field` : Parameter name for the field you want to filter against when data is set of objects or arrays.
 
 `on-type` : *(optional)* Pass a function that will receive changes, when somebody types something. It passes the full string for any character typed or deleted. You can use that for example to update the array that you passed in data.
 
