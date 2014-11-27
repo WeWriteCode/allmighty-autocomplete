@@ -1,4 +1,4 @@
-/* AUTOCOMPLETE */
+UTOCOMPLETE */
 
 .autocomplete{
   width: 100%;
@@ -6,15 +6,13 @@
 }
 
 .autocomplete input{
-  font-size: 1.2em;
   width: 100%;
-  padding: 0.4em;
 }
 
 .autocomplete ul{
   position: absolute;
   left: 0;
-  width: auto;
+  width: 100%;
   border-left: 1px solid #888;
   border-right: 1px solid #888;
   border-bottom: 1px solid #888;
@@ -27,7 +25,7 @@
 .autocomplete li{
   text-align: left;
   list-style:none;
-  padding: 1em;
+  padding: .5em;
   background-color: #fff;
   margin-left: 0;
 }
@@ -44,3 +42,4 @@
   background: #666;
   color: #fff;
 }
+
