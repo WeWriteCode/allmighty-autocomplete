@@ -268,7 +268,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
 
 app.filter('highlight', ['$sce', function ($sce) {
   return function (input, searchParam) {
-    if (typeof input === 'function') return '';
+    if (typeof input === 'function' || typeof input === 'object') return '';
     if (searchParam) {
       var words = '(' +
             searchParam.split(/\ /).join(' |') + '|' +
