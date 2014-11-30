@@ -20,6 +20,8 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
       // the index of the suggestions that's currently selected
       $scope.selectedIndex = -1;
 
+      $scope.initLock = true;
+
       // set new index
       $scope.setIndex = function(i){
         $scope.selectedIndex = parseInt(i);
@@ -46,7 +48,7 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
       // starts autocompleting on typing in something
       $scope.$watch('searchParam', function(newValue, oldValue){
 
-        if (oldValue === newValue || (newValue && newValue.length < minlength) ) {
+        if (oldValue === newValue || !oldValue) {
           return;
         }
 
@@ -104,6 +106,11 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
     }],
     link: function(scope, element, attrs){
 
+      setTimeout(function() {
+        scope.initLock = false;
+        scope.$apply();
+      }, 250);
+
       scope.titleField = attrs.titleField;
 
       var attr = '';
@@ -128,8 +135,12 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
 
       if (attrs.clickActivation) {
         element[0].onclick = function(e){
-          scope.completing = true;
-          scope.$apply();
+          if(!scope.searchParam){
+            setTimeout(function() {
+              scope.completing = true;
+              scope.$apply();
+            }, 200);
+          }
         };
       }
 
@@ -157,14 +168,17 @@ app.directive('autocomplete', ['$timeout', function($timeout) {
           scope.setIndex(-1);
           scope.$apply();
           e.preventDefault();
-        }, 200);
-      });
+        }, 150);
+      }, true);
 
       element[0].addEventListener("keydown",function (e){
 
         var keycode = e.keyCode || e.which;
 
         var l = angular.element(this).find('li').length;
+
+        // this allows submitting forms by pressing Enter in the autocompleted field
+        if(!scope.completing || l == 0) return;
 
         // implementation of the up and down movement in the list of suggestions
         switch (keycode){
